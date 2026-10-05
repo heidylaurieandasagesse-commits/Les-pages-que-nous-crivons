@@ -1223,53 +1223,135 @@ document
 
     });
 
-
-/* =========================
+  /* =========================
    PETITS CŒURS FLOTTANTS
-========================= */
+   ========================= */
+
+const heartStyle = document.createElement("style");
+
+heartStyle.textContent = `
+.heart {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    bottom: -40px;
+    opacity: 0;
+    animation: heartFloat var(--duration) ease-in forwards;
+    filter: drop-shadow(0 2px 5px rgba(120, 70, 60, 0.12));
+}
+
+@keyframes heartFloat {
+    0% {
+        transform: translate(0, 0) scale(0.55) rotate(0deg);
+        opacity: 0;
+    }
+
+    12% {
+        opacity: var(--opacity);
+    }
+
+    35% {
+        transform: translate(var(--move1), -35vh)
+                   scale(1)
+                   rotate(8deg);
+    }
+
+    65% {
+        transform: translate(var(--move2), -70vh)
+                   scale(0.9)
+                   rotate(-8deg);
+        opacity: var(--opacity);
+    }
+
+    100% {
+        transform: translate(var(--move3), -115vh)
+                   scale(0.7)
+                   rotate(12deg);
+        opacity: 0;
+    }
+}
+`;
+
+document.head.appendChild(heartStyle);
+
 
 function createHeart() {
 
-    const heart =
-        document.createElement("div");
+    const heart = document.createElement("div");
 
     heart.className = "heart";
 
-    const symbols = ["♥", "♡", "✦"];
+    const symbols = ["♥", "♡", "❤", "💕"];
 
     heart.textContent =
-        symbols[
-            Math.floor(Math.random() * symbols.length)
-        ];
+        symbols[Math.floor(Math.random() * symbols.length)];
 
 
+    /* Position horizontale */
     heart.style.left =
         Math.random() * 100 + "vw";
 
-    heart.style.bottom =
-        "-20px";
 
+    /* Taille */
     heart.style.fontSize =
-        12 + Math.random() * 12 + "px";
+        (11 + Math.random() * 18) + "px";
 
-    heart.style.animationDuration =
-        5 + Math.random() * 4 + "s";
+
+    /* Vitesse */
+    heart.style.setProperty(
+        "--duration",
+        (7 + Math.random() * 6) + "s"
+    );
+
+
+    /* Transparence */
+    heart.style.setProperty(
+        "--opacity",
+        (0.25 + Math.random() * 0.45).toFixed(2)
+    );
+
+
+    /* Mouvement naturel */
+    heart.style.setProperty(
+        "--move1",
+        (-25 + Math.random() * 50) + "px"
+    );
+
+    heart.style.setProperty(
+        "--move2",
+        (-45 + Math.random() * 90) + "px"
+    );
+
+    heart.style.setProperty(
+        "--move3",
+        (-70 + Math.random() * 140) + "px"
+    );
 
 
     document.body.appendChild(heart);
 
 
+    /* Suppression automatique */
     setTimeout(() => {
-
         heart.remove();
-
-    }, 9500);
+    }, 14000);
 }
 
 
-setInterval(createHeart, 2200);
+/* Apparition irrégulière */
+function startHearts() {
 
+    createHeart();
+
+    const delay =
+        500 + Math.random() * 900;
+
+    setTimeout(startHearts, delay);
+}
+
+startHearts();
 </script>
 
 </body>
 </html>
+    
